@@ -39,14 +39,16 @@ if args.dataset == 'MNIST':
                            transforms.Resize((32, 32)),
                            transforms.ToTensor(),
                            transforms.Normalize((0.1307, ), (0.3081, ))
-                       ]))
+                       ]),
+                       download=True)
     data_test = MNIST(args.data,
                       train=False,
                       transform=transforms.Compose([
                           transforms.Resize((32, 32)),
                           transforms.ToTensor(),
                           transforms.Normalize((0.1307, ), (0.3081, ))
-                      ]))
+                      ]),
+                       download=True)
 
     data_train_loader = DataLoader(data_train,
                                    batch_size=256,

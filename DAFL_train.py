@@ -79,6 +79,7 @@ def train_teacher(teacher, data_train_loader, data_test_loader, optimizer,
                 top1.update(prec_test.item(), n_test)
 
         print(f'Epoch {epoch}/{num_epochs}; Test Acc = {top1.avg}')
+    torch.save(teacher, 'teacher.pt')
 
 
 def test(model, data_test_loader):
@@ -358,8 +359,10 @@ def main(opt):
 
     # train the teacher model on the specified dataset
     if opt.train_teacher:
-        train_teacher(teacher, data_train_loader, data_test_loader, optimizer,
-                      opt.n_epochs_teacher)
+        if not os.path.exists("teacher.pt"):
+            train_teacher(teacher, data_train_loader, data_test_loader, optimizer,
+                        opt.n_epochs_teacher)
+        teacher.load_state_dict(torch.load('teacher.pt'))
 
     if torch.cuda.device_count() > 1:
         teacher = nn.DataParallel(teacher)
